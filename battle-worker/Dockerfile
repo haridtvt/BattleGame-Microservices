@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /opt/work
 
-COPY requirements .
+COPY requirements.txt .
 
 RUN  pip install --no-cache-dir --prefix=/install -r requirements.txt
 
