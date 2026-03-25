@@ -13,7 +13,7 @@ pipeline {
         stage ('Check out') {
         agent { label 'Security_node || Application_node' }
             steps {
-                scm checkout
+                checkout scm
             }
         }
         stage('Scan SAST'){
@@ -25,7 +25,7 @@ pipeline {
             agent { label 'Security_node' }
             steps {
                 scanSnyk()
-                scanSonar(env.SONAR_AUTH_TOKEN, env.SNYK_TOKEN, env.SONAR_URL)
+                scanSonar(env.SONAR_URL, env.SONAR_AUTH_TOKEN, env.WORKSPACE)
                 pushandcleanReport(env.S3_URL)
             }
         }
