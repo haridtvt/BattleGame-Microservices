@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  app-db:
+    container_name: app-db
+    image: postgres:15-alpine
+    env_file: .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d game"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - battle-network
+
+  redis:
+    container_name: redis-broker
+    image: redis:alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - battle-network
+
+  api-gateway:
+    container_name: api-gateway
+    image: ${DOCKER_USER}/MicroBattleAPI:latest
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - PORT=3000
+    depends_on:
+      app-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    ports:
+      - "13000:3000"
+    networks:
+      - battle-network
+
+  worker:
+    container_name: worker
+    image: ${DOCKER_USER}/MicroBattleWorker:latest
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    networks:
+      - battle-network
+
+  web:
+    container_name: web-portal
+    image: ${DOCKER_USER}/MicroBattleWeb:latest
+    environment:
+      - VITE_API_URL=http://localhost:13000
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    ports:
+      - "18080:80"
+    networks:
+      - battle-network
+
+networks:
+  battle-network:
+    driver: bridge

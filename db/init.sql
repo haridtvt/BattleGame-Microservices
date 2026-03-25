@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS leaderboard (
+    player VARCHAR(50) PRIMARY KEY,
+    score INTEGER DEFAULT 0
+);
