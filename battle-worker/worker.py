@@ -10,7 +10,7 @@ DB_URL = os.getenv('DATABASE_URL', 'postgres://admin:password@db:5432/game')
 
 def process():
     r = redis.from_url(REDIS_URL)
-    print("Worker is listening to queue....")
+    print("Worker is listening to queue...")
 
     while True:
         try:
