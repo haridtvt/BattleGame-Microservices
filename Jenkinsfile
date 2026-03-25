@@ -4,7 +4,7 @@ pipeline {
     environment {
         TAG="v${BUILD_NUMBER}"
         DOCKER_USER='haridtvt'
-        S3_URL = "s3://devsecops-reports-haridtvt/${JOB_NAME}/${TAG}/"
+        S3_URL = "s3://devsecops-reports-haridtvt/bg-testing/${TAG}/"
         API_IMAGE="${DOCKER_USER}/bg-api:${TAG}"
         WORKER_IMAGE="${DOCKER_USER}/bg-worker:${TAG}"
         WEB_IMAGE="${DOCKER_USER}/bg-web:${TAG}"
