@@ -15,7 +15,7 @@ WORKDIR /opt/web
 
 USER haridtvt
 
-COPY --from=build-stage /opt/web/dist /usr/share/nginx/html
+COPY --from=builder /opt/web/dist /usr/share/nginx/html
 
 EXPOSE 80
 
