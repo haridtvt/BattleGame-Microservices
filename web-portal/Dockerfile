@@ -3,17 +3,15 @@ LABEL authors="HARI"
 
 WORKDIR /opt/web
 
-COPY package.json .
+COPY package*.json ./
 
-RUN npm install
+RUN npm ci
 COPY . .
 
 RUN npm run build
 
 FROM nginx:stable-alpine AS production-stage
 WORKDIR /opt/web
-
-USER haridtvt
 
 COPY --from=builder /opt/web/dist /usr/share/nginx/html
 
