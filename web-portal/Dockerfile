@@ -10,7 +10,7 @@ RUN npm run build && ls -la dist/
 
 FROM nginx:stable-alpine
 RUN rm -rf /usr/share/nginx/html/*
-
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /opt/web/dist /usr/share/nginx/html/
 EXPOSE 80
 
