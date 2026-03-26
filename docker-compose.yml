@@ -33,7 +33,7 @@ services:
 
   api-gateway:
     container_name: api-gateway
-    image: ${DOCKER_USER}/MicroBattleAPI:latest
+    image: ${DOCKER_USER}/bg-api:${TAG}
     environment:
       - REDIS_URL=${REDIS_URL}
       - PORT=3000
@@ -54,7 +54,7 @@ services:
 
   worker:
     container_name: worker
-    image: ${DOCKER_USER}/MicroBattleWorker:latest
+    image: ${DOCKER_USER}/bg-worker:${TAG}
     environment:
       - REDIS_URL=redis://redis:6379
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@app-db:5432/${POSTGRES_DB}
@@ -66,7 +66,7 @@ services:
 
   web:
     container_name: web-portal
-    image: ${DOCKER_USER}/MicroBattleWeb:latest
+    image: ${DOCKER_USER}/bg-web:${TAG}
     environment:
       - VITE_API_URL=http://localhost:13000
     depends_on:
