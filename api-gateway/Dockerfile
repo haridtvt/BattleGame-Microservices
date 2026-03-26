@@ -3,7 +3,6 @@ LABEL authors="HARI"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apk --no-cache add curl
 
 WORKDIR /opt/application-api
 
@@ -16,6 +15,8 @@ COPY . .
 FROM node:20-alpine AS runner
 
 WORKDIR /opt/application-api
+
+RUN apk --no-cache add curl
 
 COPY --from=builder /opt/application-api/node_modules ./node_modules
 COPY --from=builder /opt/application-api/package.json ./
