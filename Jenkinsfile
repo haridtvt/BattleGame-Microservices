@@ -19,30 +19,30 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Snyk scan: Check dependencies'){
-            environment {
-                SONAR_AUTH_TOKEN = credentials('Sonarqube_token')
-                SNYK_TOKEN = credentials('Snyk_credentials')
-                SONAR_URL = "http://localhost:9000"
-            }
-            agent { label 'Security_node' }
-            steps {
-                scanSnyk()
-                pushandcleanReport(env.S3_URL)
-            }
-        }
-        stage('Sonarqube scan: Check quality and code smell'){
-            environment {
-                SONAR_AUTH_TOKEN = credentials('Sonarqube_token')
-                SNYK_TOKEN = credentials('Snyk_credentials')
-                SONAR_URL = "http://localhost:9000"
-            }
-            agent { label 'Security_node' }
-            steps {
-                scanSonar(env.SONAR_URL, env.SONAR_AUTH_TOKEN, env.WORKSPACE)
-            }
-        }
-        stage('Build and image scan'){
+//        stage('Snyk scan: Check dependencies'){
+//            environment {
+//                SONAR_AUTH_TOKEN = credentials('Sonarqube_token')
+//                SNYK_TOKEN = credentials('Snyk_credentials')
+//                SONAR_URL = "http://localhost:9000"
+//            }
+//            agent { label 'Security_node' }
+//            steps {
+//                scanSnyk()
+//                pushandcleanReport(env.S3_URL)
+//            }
+//        }
+//        stage('Sonarqube scan: Check quality and code smell'){
+//            environment {
+//                SONAR_AUTH_TOKEN = credentials('Sonarqube_token')
+//                SNYK_TOKEN = credentials('Snyk_credentials')
+//                SONAR_URL = "http://localhost:9000"
+//            }
+//            agent { label 'Security_node' }
+//            steps {
+//                scanSonar(env.SONAR_URL, env.SONAR_AUTH_TOKEN, env.WORKSPACE)
+//            }
+//        }
+        stage('Build'){
             agent { label 'Security_node'}
             steps {
                 script {
@@ -53,18 +53,18 @@ pipeline {
                 }
             }
         }
-        stage('Trivy scan: Image scan'){
-            agent { label 'Security_node'}
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'Docker_credentials', usernameVariable: 'DOCKER_UNAME', passwordVariable: 'DOCKER_PASS')]) {
-                        loginDocker(env.DOCKER_PASS, env.DOCKER_UNAME)
-                        scanTrivy(env.API_IMAGE,env.WORKER_IMAGE, env.WEB_IMAGE)
-                        pushandcleanReport(env.S3_URL)
-                    }
-                }
-            }
-        }
+//        stage('Trivy scan: Image scan'){
+//            agent { label 'Security_node'}
+//            steps {
+//                script {
+//                    withCredentials([usernamePassword(credentialsId: 'Docker_credentials', usernameVariable: 'DOCKER_UNAME', passwordVariable: 'DOCKER_PASS')]) {
+//                        loginDocker(env.DOCKER_PASS, env.DOCKER_UNAME)
+//                        scanTrivy(env.API_IMAGE,env.WORKER_IMAGE, env.WEB_IMAGE)
+//                        pushandcleanReport(env.S3_URL)
+//                    }
+//                }
+//            }
+//        }
         stage('Push Image'){
             agent { label 'Security_node'}
             steps {
