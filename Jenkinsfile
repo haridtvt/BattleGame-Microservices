@@ -25,8 +25,8 @@ pipeline {
             agent { label 'Security_node' }
             steps {
                 scanSnyk()
-                scanSonar(env.SONAR_URL, env.SONAR_AUTH_TOKEN, env.WORKSPACE)
                 pushandcleanReport(env.S3_URL)
+                scanSonar(env.SONAR_URL, env.SONAR_AUTH_TOKEN, env.WORKSPACE)
             }
         }
         stage('Build and image scan'){
