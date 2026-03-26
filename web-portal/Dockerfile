@@ -11,7 +11,7 @@ RUN npm run build
 FROM nginx:stable-alpine AS production-stage
 
 
-COPY --from=builder /opt/web/dist /usr/share/nginx/html
+COPY --from=builder /opt/web/dist /usr/share/nginx/index.html
 
 EXPOSE 80
 
