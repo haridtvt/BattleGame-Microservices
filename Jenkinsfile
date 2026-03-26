@@ -87,6 +87,7 @@ pipeline {
                         sh 'export POSTGRES_USER=${POSTGRES_USER}'
                         sh 'export POSTGRES_PASSWORD=${POSTGRES_PASSWORD}'
                         sh 'export POSTGRES_DB=${POSTGRES_DB}'
+                        sh 'export TAG=${TAG}'
                         pullanddeployImage(env.WEB_IMAGE, env.WEB_IMAGE, env.WEB_IMAGE)
                     }
                 }
