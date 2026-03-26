@@ -11,7 +11,7 @@ RUN npm install --production
 
 COPY . .
 
-FROM node:20-alpine as runner
+FROM node:20-alpine AS runner
 
 WORKDIR /opt/application-api
 
