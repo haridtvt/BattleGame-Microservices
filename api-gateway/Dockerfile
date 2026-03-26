@@ -3,6 +3,8 @@ LABEL authors="HARI"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN apk --no-cache add curl
+
 WORKDIR /opt/application-api
 
 COPY package.json .
