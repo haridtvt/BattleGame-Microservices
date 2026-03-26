@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 function App() {
   const [status, setStatus] = useState("Idle");
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+  const API_URL = import.meta.env.VITE_API_URL || "http://54.169.79.239:13000";
   const handleAttack = async () => {
     setStatus("Sending...");
     try {
